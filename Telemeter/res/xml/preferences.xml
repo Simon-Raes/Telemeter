@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- This file contains all options under the settings menu. -->
+    <PreferenceCategory
+            android:key="pref_key_account_settings"
+            android:title="Account">
+
+        <EditTextPreference
+                android:title="Telenet login"
+                android:defaultValue=""
+                android:inputType="text"
+                android:key="be.simonraes.telemeter.login"
+                android:summary="Your telenet login"
+                />
+        <EditTextPreference
+                android:title="Telenet password"
+                android:defaultValue=""
+                android:inputType="textPassword"
+                android:key="be.simonraes.telemeter.password"
+                android:summary=""
+                />
+
+    </PreferenceCategory>
+</PreferenceScreen>
