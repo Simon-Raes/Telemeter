@@ -1,9 +1,12 @@
 package be.simonraes.telemeter.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Simon Raes on 13/06/2014.
  */
-public class TelemeterResponse {
+public class TelemeterData implements Parcelable{
 
     //always:
     private Ticket ticket;
@@ -16,6 +19,10 @@ public class TelemeterResponse {
     private Volume volume;
     //in case of error:
     private Fault fault;
+
+    public TelemeterData(){
+
+    }
 
     public Ticket getTicket() {
         if (ticket != null) {
@@ -100,6 +107,43 @@ public class TelemeterResponse {
     public void setFault(Fault fault) {
         this.fault = fault;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(ticket, 0);
+        dest.writeParcelable(period, 0);
+        dest.writeParcelable(usage, 0);
+        dest.writeString(status);
+        dest.writeParcelable(statusDescription,0);
+        dest.writeParcelable(volume, 0);
+        dest.writeParcelable(fault, 0);
+    }
+
+    public TelemeterData(Parcel pc) {
+        ticket = pc.readParcelable(Ticket.class.getClassLoader());
+        period = pc.readParcelable(Period.class.getClassLoader());
+        usage = pc.readParcelable(Usage.class.getClassLoader());
+        status = pc.readString();
+        statusDescription = pc.readParcelable(StatusDescription.class.getClassLoader());
+        volume = pc.readParcelable(Volume.class.getClassLoader());
+        fault = pc.readParcelable(Fault.class.getClassLoader());
+    }
+
+    public static final Creator<TelemeterData> CREATOR = new
+            Creator<TelemeterData>() {
+                public TelemeterData createFromParcel(Parcel pc) {
+                    return new TelemeterData(pc);
+                }
+
+                public TelemeterData[] newArray(int size) {
+                    return new TelemeterData[size];
+                }
+            };
 
     /*
     Volume response:

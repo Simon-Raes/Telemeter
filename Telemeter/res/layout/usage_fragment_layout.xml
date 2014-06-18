@@ -4,9 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:padding="10dp"
-              android:layout_margin="10dp"
-              android:background="@color/white">
+              android:background="@drawable/bg_card">
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:id="@+id/txtUsageUsed"
               android:textColor="@color/yellow"
@@ -14,5 +12,6 @@
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:id="@+id/txtUsageRemaining"
               android:textColor="@color/yellow"
+              android:textSize="30dp"
               android:text="amount remaining"/>
 </LinearLayout>

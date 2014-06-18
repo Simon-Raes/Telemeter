@@ -1,11 +1,15 @@
 package be.simonraes.telemeter.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Simon Raes on 15/06/2014.
  */
-public class Volume {
+public class Volume implements Parcelable {
 
     private String unit, limit, totalUsage;
     private ArrayList<DailyUsage> dailyUsageList;
@@ -55,4 +59,36 @@ public class Volume {
     public void setDailyUsageList(ArrayList<DailyUsage> dailyUsageList) {
         this.dailyUsageList = dailyUsageList;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(unit);
+        dest.writeString(limit);
+        dest.writeString(totalUsage);
+        dest.writeTypedList(dailyUsageList);
+    }
+
+    public Volume(Parcel pc) {
+        unit = pc.readString();
+        limit = pc.readString();
+        totalUsage = pc.readString();
+        dailyUsageList = pc.readArrayList(DailyUsage.class.getClassLoader());
+    }
+
+    public static final Creator<Volume> CREATOR = new
+            Creator<Volume>() {
+                public Volume createFromParcel(Parcel pc) {
+                    return new Volume(pc);
+                }
+
+                public Volume[] newArray(int size) {
+                    return new Volume[size];
+                }
+            };
 }

@@ -1,9 +1,12 @@
 package be.simonraes.telemeter.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Simon Raes on 13/06/2014.
  */
-public class Fault {
+public class Fault implements Parcelable {
 
     private String faultCode, faultString;
     private Detail detail;
@@ -48,4 +51,34 @@ public class Fault {
     public void setDetail(Detail detail) {
         this.detail = detail;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(faultCode);
+        dest.writeString(faultString);
+        dest.writeParcelable(detail, 0);
+    }
+
+    public Fault(Parcel pc) {
+        faultCode = pc.readString();
+        faultString = pc.readString();
+        detail = pc.readParcelable(Detail.class.getClassLoader());
+    }
+
+    public static final Creator<Fault> CREATOR = new
+            Creator<Fault>() {
+                public Fault createFromParcel(Parcel pc) {
+                    return new Fault(pc);
+                }
+
+                public Fault[] newArray(int size) {
+                    return new Fault[size];
+                }
+            };
 }

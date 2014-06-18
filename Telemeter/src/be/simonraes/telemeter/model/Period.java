@@ -1,11 +1,14 @@
 package be.simonraes.telemeter.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by Simon Raes on 13/06/2014.
  */
-public class Period {
+public class Period implements Parcelable{
     private Date from, till;
     private String currentDay;
 
@@ -44,4 +47,36 @@ public class Period {
     public void setCurrentDay(String currentDay) {
         this.currentDay = currentDay;
     }
+
+    //parcelable code
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        //convert dates to long so they are parcelable
+        dest.writeLong(from.getTime());
+        dest.writeLong(till.getTime());
+        dest.writeString(currentDay);
+    }
+
+    public Period(Parcel pc) {
+        from = new Date(pc.readLong());
+        till = new Date(pc.readLong());
+        currentDay = pc.readString();
+    }
+
+    public static final Creator<Period> CREATOR = new
+            Creator<Period>() {
+                public Period createFromParcel(Parcel pc) {
+                    return new Period(pc);
+                }
+
+                public Period[] newArray(int size) {
+                    return new Period[size];
+                }
+            };
 }

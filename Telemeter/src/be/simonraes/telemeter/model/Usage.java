@@ -1,11 +1,14 @@
 package be.simonraes.telemeter.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by Simon Raes on 13/06/2014.
  */
-public class Usage {
+public class Usage implements Parcelable {
     private double totalUsage, minUsageRemaining, maxUsageRemaining;
     private String unit;
     private Date lastUpdate;
@@ -65,4 +68,42 @@ public class Usage {
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+    //parcelable code
+
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(totalUsage);
+        dest.writeDouble(minUsageRemaining);
+        dest.writeDouble(maxUsageRemaining);
+        dest.writeString(unit);
+        //convert dates to long so they are parcelable
+        dest.writeLong(lastUpdate.getTime());
+    }
+
+    public Usage(Parcel pc) {
+        totalUsage = pc.readDouble();
+        minUsageRemaining = pc.readDouble();
+        maxUsageRemaining = pc.readDouble();
+        unit = pc.readString();
+        lastUpdate = new Date(pc.readLong());
+    }
+
+    public static final Creator<Usage> CREATOR = new
+            Creator<Usage>() {
+                public Usage createFromParcel(Parcel pc) {
+                    return new Usage(pc);
+                }
+
+                public Usage[] newArray(int size) {
+                    return new Usage[size];
+                }
+            };
 }

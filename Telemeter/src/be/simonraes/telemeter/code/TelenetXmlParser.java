@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Created by Simon Raes on 11/06/2014.
  */
-public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterResponse> {
+public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterData> {
 
     private TelenetXmlResponse delegate;
 
@@ -25,7 +25,7 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterResponse>
     }
 
     @Override
-    protected TelemeterResponse doInBackground(String... strings) {
+    protected TelemeterData doInBackground(String... strings) {
 
         String input;
 
@@ -35,13 +35,13 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterResponse>
             input = "";
         }
 
-        TelemeterResponse telemeterResponse = null;
+        TelemeterData telemeterData = null;
 
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
 
-            telemeterResponse = new TelemeterResponse();
+            telemeterData = new TelemeterData();
 
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new StringReader(input));
@@ -52,34 +52,34 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterResponse>
 
                     //Ticket
                     if (parser.getName().equals("Ticket")) {
-                        telemeterResponse.setTicket(readTicket(parser));
+                        telemeterData.setTicket(readTicket(parser));
                     }
 
                     //FUP
                     if (parser.getName().equals("Period")) {
-                        telemeterResponse.setPeriod(readPeriod(parser));
+                        telemeterData.setPeriod(readPeriod(parser));
                     }
                     if (parser.getName().equals("Usage")) {
-                        telemeterResponse.setUsage(readUsage(parser));
+                        telemeterData.setUsage(readUsage(parser));
                     }
 
                     //Status
                     if (parser.getName().equals("Status")) {
-                        telemeterResponse.setStatus(parser.nextText());
+                        telemeterData.setStatus(parser.nextText());
                     }
                     //StatusDescription
                     if (parser.getName().equals("StatusDescription")) {
-                        telemeterResponse.setStatusDescription(readStatusDescription(parser));
+                        telemeterData.setStatusDescription(readStatusDescription(parser));
                     }
 
                     //Volume
                     if (parser.getName().equals("Volume")) {
-                        telemeterResponse.setVolume(readVolume(parser));
+                        telemeterData.setVolume(readVolume(parser));
                     }
 
                     //Fault
                     if (parser.getName().equals("Fault")) {
-                        telemeterResponse.setFault(readFault(parser));
+                        telemeterData.setFault(readFault(parser));
                     }
 
 
@@ -92,7 +92,7 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterResponse>
 
         }
 
-        return telemeterResponse;
+        return telemeterData;
     }
 
 
@@ -354,9 +354,9 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterResponse>
     }
 
     @Override
-    protected void onPostExecute(TelemeterResponse telemeterResponse) {
-        super.onPostExecute(telemeterResponse);
-        delegate.parseComplete(telemeterResponse);
+    protected void onPostExecute(TelemeterData telemeterData) {
+        super.onPostExecute(telemeterData);
+        delegate.parseComplete(telemeterData);
     }
 
     private Date timeStampStringToDate(String timestamp) {
@@ -384,6 +384,6 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterResponse>
     }
 
     public interface TelenetXmlResponse {
-        public void parseComplete(TelemeterResponse response);
+        public void parseComplete(TelemeterData response);
     }
 }
