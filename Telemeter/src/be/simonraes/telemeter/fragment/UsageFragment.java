@@ -1,6 +1,7 @@
 package be.simonraes.telemeter.fragment;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,12 @@ public class UsageFragment extends Fragment {
     }
 
     public void setUsage(Usage usage) {
-        txtUsageCurrent.setText("Used: " + usage.getTotalUsage() + usage.getUnit());
-        txtUsageRemaining.setText("Remaining: " + usage.getMinUsageRemaining() + " - " + usage.getMaxUsageRemaining());
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/cooper.ttf");
+        txtUsageCurrent.setTypeface(tf);
+        txtUsageCurrent.setText("Gebruikt: " + usage.getTotalUsage() + usage.getUnit());
+        txtUsageRemaining.setTypeface(tf);
+        txtUsageRemaining.setText("Resterend: " + usage.getMinUsageRemaining() + usage.getUnit() + " - " + usage.getMaxUsageRemaining() + usage.getUnit());
     }
+
+
 }

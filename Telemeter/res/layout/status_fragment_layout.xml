@@ -6,13 +6,8 @@
               android:layout_height="match_parent"
               android:background="@drawable/bg_card">
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:id="@+id/txtUsageUsed"
+              android:id="@+id/txtStatus"
               android:textColor="@color/yellow"
               android:textSize="30dp"
-              android:text="amount used"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:id="@+id/txtUsageRemaining"
-              android:textColor="@color/yellow"
-              android:textSize="30dp"
-              android:text="amount remaining"/>
+              android:text="status"/>
 </LinearLayout>

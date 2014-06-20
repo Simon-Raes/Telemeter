@@ -3,6 +3,8 @@ package be.simonraes.telemeter.activity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import be.simonraes.telemeter.R;
 import be.simonraes.telemeter.code.TelemeterLoader;
 import be.simonraes.telemeter.code.TelenetXmlParser;
 import be.simonraes.telemeter.fragment.PeriodFragment;
+import be.simonraes.telemeter.fragment.StatusFragment;
 import be.simonraes.telemeter.fragment.UsageFragment;
 import be.simonraes.telemeter.model.TelemeterData;
 
@@ -27,7 +30,8 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
-
+        //getActionBar().setBackgroundDrawable(new ColorDrawable(R.color.orange));
+        getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F36535")));
         if(savedInstanceState!=null){
             telemeterData = savedInstanceState.getParcelable("telemeterData");
             refreshUI();
@@ -137,9 +141,19 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
     private void refreshUI(){
         FragmentManager manager = getFragmentManager();
         PeriodFragment periodFragment = (PeriodFragment) manager.findFragmentById(R.id.periodFragment);
-        periodFragment.setPeriod(telemeterData.getPeriod());
+        if(periodFragment!=null){
+            periodFragment.setPeriod(telemeterData.getPeriod());
+        }
 
         UsageFragment usageFragment = (UsageFragment) manager.findFragmentById(R.id.usageFragment);
-        usageFragment.setUsage(telemeterData.getUsage());
+        if(usageFragment!=null){
+            usageFragment.setUsage(telemeterData.getUsage());
+        }
+
+        StatusFragment statusFragment = (StatusFragment) manager.findFragmentById(R.id.statusFragment);
+        if(statusFragment!=null){
+            statusFragment.setStatus(telemeterData.getStatus());
+        }
+
     }
 }

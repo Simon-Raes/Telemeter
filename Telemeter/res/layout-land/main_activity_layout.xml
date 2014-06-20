@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/yellow">
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/layLandLeft"
+                  android:layout_centerVertical="true"
+                  android:orientation="vertical">
+        <fragment android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:name="be.simonraes.telemeter.fragment.PeriodFragment"
+                  android:id="@+id/periodFragment"
+                  android:layout_margin="10dp"
+                  tools:layout="@layout/period_fragment_layout"/>
+        <fragment android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:name="be.simonraes.telemeter.fragment.UsageFragment"
+                  android:layout_margin="10dp"
+                  android:id="@+id/usageFragment"
+                  android:layout_gravity="center_horizontal"
+                  tools:layout="@layout/usage_fragment_layout"/>
+        <fragment android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:name="be.simonraes.telemeter.fragment.StatusFragment"
+                  android:layout_margin="10dp"
+                  android:id="@+id/statusFragment"
+                  android:layout_gravity="center_horizontal"
+                  tools:layout="@layout/status_fragment_layout"/>
+    </LinearLayout>
+    <fragment android:layout_width="fill_parent" android:layout_height="fill_parent"
+              android:id="@+id/fillerFragment"
+              android:layout_toRightOf="@id/layLandLeft"
+              android:name="be.simonraes.telemeter.fragment.FillerFragment"
+              android:layout_margin="10dp"
+              android:layout_gravity="center_horizontal"
+              tools:layout="@layout/filler_fragment_layout"/>
+</RelativeLayout>
