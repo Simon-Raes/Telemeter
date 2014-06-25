@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_bubble"
+                android:padding="0dp">
+
+
+    <!--<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"-->
+                  <!--android:orientation="horizontal"-->
+                  <!--android:layout_centerHorizontal="true">-->
+        <!--<TextView android:layout_width="0dp" android:layout_height="fill_parent"-->
+                  <!--android:text="Verbruikt"-->
+                  <!--android:layout_weight="1"-->
+                  <!--android:gravity="center"-->
+                  <!--android:textColor="@color/orange"/>-->
+        <!--<TextView android:layout_width="0dp" android:layout_height="fill_parent"-->
+                  <!--android:text="Resterend"-->
+                  <!--android:layout_weight="1"-->
+                  <!--android:gravity="center"-->
+                  <!--android:textColor="@color/orange"/>-->
+    <!--</LinearLayout>-->
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_centerInParent="true">
+        <ImageView android:layout_width="0dp" android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:id="@+id/imgWidgetUsage"
+                   android:adjustViewBounds="true"/>
+        <ImageView android:layout_width="0dp" android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:id="@+id/imgWidgetRemaining"
+                   android:adjustViewBounds="true"/>
+    </LinearLayout>
+
+</RelativeLayout>

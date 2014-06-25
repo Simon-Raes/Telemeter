@@ -28,7 +28,7 @@ public class UsageFragment extends Fragment {
     public void setUsage(Usage usage) {
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/cooper.ttf");
         txtUsageCurrent.setTypeface(tf);
-        txtUsageCurrent.setText("Gebruikt: " + usage.getTotalUsage() + usage.getUnit());
+        txtUsageCurrent.setText("Verbruikt: " + usage.getTotalUsage() + usage.getUnit());
         txtUsageRemaining.setTypeface(tf);
         txtUsageRemaining.setText("Resterend: " + usage.getMinUsageRemaining() + usage.getUnit() + " - " + usage.getMaxUsageRemaining() + usage.getUnit());
     }

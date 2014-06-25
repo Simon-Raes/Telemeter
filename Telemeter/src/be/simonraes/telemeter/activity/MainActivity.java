@@ -19,6 +19,8 @@ import be.simonraes.telemeter.fragment.StatusFragment;
 import be.simonraes.telemeter.fragment.UsageFragment;
 import be.simonraes.telemeter.model.TelemeterData;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by Simon Raes on 13/06/2014.
  */
@@ -26,6 +28,7 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
 
     private TelemeterData telemeterData;
 
+    //todo: app logo resize (smaller)
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +129,9 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
 //                System.out.println("status description: "+response.getStatusDescription().getNl());
 //                System.out.println("description status: "+response.getStatusDescription().getFr());
 
+                //save info to shared preferences to it can be accessed in the widget
+                saveDataToPreferences(response);
+
                 refreshUI();
                 Toast.makeText(this, "Data up-to-date.", Toast.LENGTH_SHORT).show();
 
@@ -136,6 +142,14 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
                 }
             }
         }
+    }
+
+    private void saveDataToPreferences(TelemeterData response){
+        //remove decimals to save space
+        DecimalFormat format = new DecimalFormat("0");
+
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("TotalUsage",format.format(response.getUsage().getTotalUsage())).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("MinUsageRemaining",format.format(response.getUsage().getMinUsageRemaining())).commit();
     }
 
     private void refreshUI(){

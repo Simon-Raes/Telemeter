@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:minWidth="40dp"
+                    android:minHeight="40dp"
+                    android:updatePeriodMillis="0"
+
+                    android:initialLayout="@layout/widget_1x1"
+                    android:resizeMode="horizontal|vertical"
+                    android:widgetCategory="home_screen">
+</appwidget-provider>
+        <!--
+        image shown in the widget selection menu, optional
+        android:previewImage="@drawable/preview"
+
+        config activity displayed when adding widget to home screen, optional
+        android:configure="com.example.android.ExampleAppWidgetConfigure"
+
+        home_screen: normal widget position
+        keyguard: widget can be placed on lock screen
+        android:widgetCategory="home_screen|keyguard"
+
+        layout file for the lockscreen version of the widget, only required if keyguard category is enabled
+        android:initialKeyguardLayout="@layout/example_keyguard"-->
