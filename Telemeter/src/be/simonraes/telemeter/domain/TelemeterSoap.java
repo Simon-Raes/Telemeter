@@ -1,4 +1,4 @@
-package be.simonraes.telemeter.code;
+package be.simonraes.telemeter.domain;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,7 +13,7 @@ import java.io.*;
 /**
  * Created by Simon Raes on 13/06/2014.
  */
-public class TelemeterLoader extends AsyncTask<String, Void, String> {
+public class TelemeterSoap extends AsyncTask<String, Void, String> {
 
     private Context context;
     private TelemeterLoaderResponse delegate;
@@ -26,7 +26,7 @@ public class TelemeterLoader extends AsyncTask<String, Void, String> {
 
     private String telemeterResponse;
 
-    public TelemeterLoader(Context context, TelemeterLoaderResponse delegate) {
+    public TelemeterSoap(Context context, TelemeterLoaderResponse delegate) {
         this.context = context;
         this.delegate = delegate;
     }

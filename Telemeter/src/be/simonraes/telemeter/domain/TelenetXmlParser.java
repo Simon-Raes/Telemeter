@@ -1,4 +1,4 @@
-package be.simonraes.telemeter.code;
+package be.simonraes.telemeter.domain;
 
 import android.os.AsyncTask;
 import be.simonraes.telemeter.model.*;
