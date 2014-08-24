@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
+ * Parses the received XML response and creates a TelemeterData object.
  * Created by Simon Raes on 11/06/2014.
  */
 public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterData> {
@@ -228,8 +229,6 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterData> {
         parser.require(XmlPullParser.START_TAG, null, "StatusDescription");
         String nl = null;
         String fr = null;
-
-        System.out.println("readStatusDescription");
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {

@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 import be.simonraes.telemeter.R;
+import be.simonraes.telemeter.database.TelemeterDataDataSource;
 import be.simonraes.telemeter.domain.MessageToaster;
 import be.simonraes.telemeter.domain.TelemeterLoader;
 import be.simonraes.telemeter.fragment.PeriodFragment;
@@ -19,35 +20,37 @@ import be.simonraes.telemeter.fragment.StatusFragment;
 import be.simonraes.telemeter.fragment.UsageFragment;
 import be.simonraes.telemeter.model.TelemeterData;
 
-import java.text.DecimalFormat;
-
 /**
- * Main activity showing telemeter usages
+ * Main activity showing telemeter usage.
  * Created by Simon Raes on 13/06/2014.
  */
-public class MainActivity extends Activity implements  TelemeterLoader.TelemeterListener {
-
-    private TelemeterData telemeterData;
+public class MainActivity extends Activity implements TelemeterLoader.TelemeterLoaderResponse {
 
     //todo: app logo resize (smaller)
+
+    private TelemeterData data;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
-        //getActionBar().setBackgroundDrawable(new ColorDrawable(R.color.orange)); //doesn't work?
-        getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F36535")));
-        if(savedInstanceState!=null){
-            telemeterData = savedInstanceState.getParcelable("telemeterData");
-            refreshUI();
-        } else {
-            refreshData();
+
+        if(getActionBar()!=null) {
+            getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F36535")));  //R.color.orange doesn't seem to work?
         }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("telemeterData", telemeterData);
+    protected void onResume() {
+        super.onResume();
+        // Display the latest data (in case the widget downloaded more recent info).
+        TelemeterDataDataSource tdds = new TelemeterDataDataSource(this);
+        data = tdds.getLatestTelemeterData();
+
+        if(data.getPeriod().getFrom()!=null) {
+            refreshUI();
+        }
+
+        TelemeterLoader.registerAsListener(this);
     }
 
     @Override
@@ -66,13 +69,16 @@ public class MainActivity extends Activity implements  TelemeterLoader.Telemeter
             case R.id.btnRefresh:
                 refreshData();
                 return true;
+            case R.id.btnDatabaseTest:
+                TelemeterDataDataSource ds = new TelemeterDataDataSource(this);
+                ds.getLatestTelemeterData();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void refreshData() {
-
+        System.out.println("refreshing");
         String login = PreferenceManager.getDefaultSharedPreferences(this).getString("be.simonraes.telemeter.login", "");
         String password = PreferenceManager.getDefaultSharedPreferences(this).getString("be.simonraes.telemeter.password", "");
         if (!login.equals("") && !password.equals("")) {
@@ -85,61 +91,46 @@ public class MainActivity extends Activity implements  TelemeterLoader.Telemeter
         }
     }
 
-    private void goToSettings(){
+    private void goToSettings() {
         Intent settingsIntent = new Intent(this, SettingsActivity.class);
         startActivity(settingsIntent);
     }
 
-
-    private void refreshUI(){
+    private void refreshUI() {
         FragmentManager manager = getFragmentManager();
+
         PeriodFragment periodFragment = (PeriodFragment) manager.findFragmentById(R.id.periodFragment);
-        if(periodFragment!=null){
-            periodFragment.setPeriod(telemeterData.getPeriod());
+        if (periodFragment != null) {
+            periodFragment.setPeriod(data.getPeriod());
         }
 
         UsageFragment usageFragment = (UsageFragment) manager.findFragmentById(R.id.usageFragment);
-        if(usageFragment!=null){
-            usageFragment.setUsage(telemeterData.getUsage());
+        if (usageFragment != null) {
+            usageFragment.setUsage(data.getUsage());
         }
 
         StatusFragment statusFragment = (StatusFragment) manager.findFragmentById(R.id.statusFragment);
-        if(statusFragment!=null){
-            statusFragment.setStatus(telemeterData.getStatus());
+        if (statusFragment != null) {
+            statusFragment.setStatus(data.getStatus());
         }
-
     }
 
     @Override
-    public void responseComplete(TelemeterData response) {
-        if(response!=null){
-            telemeterData = response;
+    public void telemeterDataUpdated() {
 
-        }
-        if (response.getFault().getFaultString() != null && !response.getFault().getFaultString().equals("")) {
-            //an error occurred
-            MessageToaster.displayStatusToast(this, response);
-        } else {
-            if (response.getUsage() != null) {
-                //got a FUP response
-
-//                System.out.println("ticket info: "+response.getTicket().getTimestamp()+" and "+response.getTicket().getExpiryTimestamp());
-//                System.out.println("total current usage (usage remaining): " + response.getUsage().getTotalUsage()+response.getUsage().getUnit()+" ("+response.getUsage().getMinUsageRemaining()+"-"+response.getUsage().getMaxUsageRemaining()+")");
-//                System.out.println("period (from-till (today)): "+response.getPeriod().getFrom()+" - "+response.getPeriod().getTill()+" ("+response.getPeriod().getCurrentDay()+")");
-//                System.out.println("Status: "+response.getStatus());
-//                System.out.println("status description: "+response.getStatusDescription().getNl());
-//                System.out.println("description status: "+response.getStatusDescription().getFr());
-
-                refreshUI();
-                Toast.makeText(this, "Done.", Toast.LENGTH_SHORT).show();
-
+        if (data != null) {
+            if (data.getFault().getFaultString() != null && !data.getFault().getFaultString().equals("")) {
+                // An error occurred
+                MessageToaster.displayFaultToast(this, data);
             } else {
-                if (response.getVolume().getLimit() != null) {
-                    //got a volume response
-                    //todo: find someone with a volume telenet plan
-
-                }
+                loadLatestDatabaseData();
+                refreshUI();
             }
         }
+    }
+
+    private void loadLatestDatabaseData() {
+        TelemeterDataDataSource tdds = new TelemeterDataDataSource(this);
+        data = tdds.getLatestTelemeterData();
     }
 }

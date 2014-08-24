@@ -9,4 +9,8 @@
           android:icon="@drawable/ic_action_settings"
           android:title="Settings"
           android:showAsAction="never"/>
+    <item android:id="@+id/btnDatabaseTest"
+          android:icon="@drawable/ic_action_settings"
+          android:title="Database Test"
+          android:showAsAction="never"/>
 </menu>

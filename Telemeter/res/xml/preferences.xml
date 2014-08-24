@@ -4,17 +4,17 @@
     <!-- This file contains all options under the settings menu. -->
     <PreferenceCategory
             android:key="pref_key_account_settings"
-            android:title="Account">
+            android:title="Telenet account details">
 
         <EditTextPreference
-                android:title="Telenet login"
+                android:title="Login"
                 android:defaultValue=""
                 android:inputType="text"
                 android:key="be.simonraes.telemeter.login"
-                android:summary="Your telenet login"
+                android:summary="Your telenet login."
                 />
         <EditTextPreference
-                android:title="Telenet password"
+                android:title="Password"
                 android:defaultValue=""
                 android:inputType="textPassword"
                 android:key="be.simonraes.telemeter.password"
@@ -22,4 +22,22 @@
                 />
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_key_service_settings"
+        android:title="Service">
+        <CheckBoxPreference
+            android:title="Automatically update"
+            android:defaultValue="false"
+            android:key="be.simonraes.telemeter.autoupdate"
+            android:summary="Automatically download the latest Telemeter data."/>
+
+        <EditTextPreference
+            android:key="be.simonraes.telemeter.autoupdatetime"
+            android:defaultValue="24"
+            android:title="Update every"
+            android:summary="24 hours."
+            android:inputType="numberDecimal"
+                android:dependency="be.simonraes.telemeter.autoupdate"/>
+
+        </PreferenceCategory>
 </PreferenceScreen>

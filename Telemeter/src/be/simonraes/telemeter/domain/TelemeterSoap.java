@@ -11,12 +11,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.*;
 
 /**
+ * Sends the SOAP request and receives the response XML.
  * Created by Simon Raes on 13/06/2014.
  */
 public class TelemeterSoap extends AsyncTask<String, Void, String> {
 
     private Context context;
-    private TelemeterLoaderResponse delegate;
+    private TelemeterSoapResponse delegate;
 
     private String username, password;
     private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -26,7 +27,7 @@ public class TelemeterSoap extends AsyncTask<String, Void, String> {
 
     private String telemeterResponse;
 
-    public TelemeterSoap(Context context, TelemeterLoaderResponse delegate) {
+    public TelemeterSoap(Context context,TelemeterSoapResponse delegate) {
         this.context = context;
         this.delegate = delegate;
     }
@@ -106,7 +107,7 @@ public class TelemeterSoap extends AsyncTask<String, Void, String> {
     }
 
     //Sends the response to the delegate
-    public interface TelemeterLoaderResponse {
+    public interface TelemeterSoapResponse {
         public void loadComplete(String response);
     }
 }

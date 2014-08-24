@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by Simon Raes on 13/06/2014.
  */
-public class TelemeterData implements Parcelable{
+public class TelemeterData implements Parcelable {
 
     //always:
     private Ticket ticket;
@@ -20,16 +20,15 @@ public class TelemeterData implements Parcelable{
     //in case of error:
     private Fault fault;
 
-    public TelemeterData(){
+    public TelemeterData() {
 
     }
 
     public Ticket getTicket() {
-        if (ticket != null) {
-            return ticket;
-        } else {
-            return new Ticket();
+        if (ticket == null) {
+            ticket = new Ticket();
         }
+        return ticket;
     }
 
     public void setTicket(Ticket ticket) {
@@ -37,11 +36,10 @@ public class TelemeterData implements Parcelable{
     }
 
     public Period getPeriod() {
-        if (period != null) {
-            return period;
-        } else {
-            return new Period();
+        if (period == null) {
+            period = new Period();
         }
+        return period;
     }
 
     public void setPeriod(Period period) {
@@ -49,11 +47,10 @@ public class TelemeterData implements Parcelable{
     }
 
     public Usage getUsage() {
-        if (usage != null) {
-            return usage;
-        } else {
-            return new Usage();
+        if (usage == null) {
+            usage = new Usage();
         }
+        return usage;
     }
 
     public void setUsage(Usage usage) {
@@ -61,11 +58,7 @@ public class TelemeterData implements Parcelable{
     }
 
     public String getStatus() {
-        if (status != null) {
-            return status;
-        } else {
-            return "";
-        }
+        return status;
     }
 
     public void setStatus(String status) {
@@ -73,11 +66,10 @@ public class TelemeterData implements Parcelable{
     }
 
     public StatusDescription getStatusDescription() {
-        if (statusDescription != null) {
-            return statusDescription;
-        } else {
-            return new StatusDescription();
+        if (statusDescription == null) {
+            statusDescription = new StatusDescription();
         }
+        return statusDescription;
     }
 
     public void setStatusDescription(StatusDescription statusDescription) {
@@ -85,11 +77,10 @@ public class TelemeterData implements Parcelable{
     }
 
     public Volume getVolume() {
-        if (volume != null) {
-            return volume;
-        } else {
-            return new Volume();
+        if (volume == null) {
+            volume = new Volume();
         }
+        return volume;
     }
 
     public void setVolume(Volume volume) {
@@ -97,11 +88,10 @@ public class TelemeterData implements Parcelable{
     }
 
     public Fault getFault() {
-        if (fault != null) {
-            return fault;
-        } else {
-            return new Fault();
+        if (fault == null) {
+            fault = new Fault();
         }
+        return fault;
     }
 
     public void setFault(Fault fault) {
@@ -119,7 +109,7 @@ public class TelemeterData implements Parcelable{
         dest.writeParcelable(period, 0);
         dest.writeParcelable(usage, 0);
         dest.writeString(status);
-        dest.writeParcelable(statusDescription,0);
+        dest.writeParcelable(statusDescription, 0);
         dest.writeParcelable(volume, 0);
         dest.writeParcelable(fault, 0);
     }

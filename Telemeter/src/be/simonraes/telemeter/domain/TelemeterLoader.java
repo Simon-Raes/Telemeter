@@ -2,40 +2,49 @@ package be.simonraes.telemeter.domain;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
+import be.simonraes.telemeter.database.TelemeterDataDataSource;
 import be.simonraes.telemeter.model.TelemeterData;
 
+import java.util.ArrayList;
+
 /**
+ * Controls the SOAP and XML async classes.
  * Created by Simon Raes on 27/06/2014.
  */
-public class TelemeterLoader implements TelemeterSoap.TelemeterLoaderResponse, TelenetXmlParser.TelenetXmlResponse {
-    private TelemeterListener listener;
-    private static TelemeterLoader telemeterLoader;
-    private Context context;
+public class TelemeterLoader implements TelemeterSoap.TelemeterSoapResponse, TelenetXmlParser.TelenetXmlResponse {
 
-    public TelemeterLoader(Context context, TelemeterListener listener) {
-        this.context = context;
-        this.listener = listener;
+//    private TelemeterLoaderResponse listener;
+    private static ArrayList<TelemeterLoaderResponse> listeners;
+
+    public interface TelemeterLoaderResponse {
+        public void telemeterDataUpdated();
     }
 
-//    public static TelemeterLoader getInstance() {
-//        if (telemeterLoader == null) {
-//            telemeterLoader = new TelemeterLoader();
-//        }
-//        return telemeterLoader;
-//    }
+    private Context context;
 
-//    public void addListener(TelemeterListener listener) {
-//        if (!listeners.contains(listener)) {
-//            listeners.add(listener);
-//        }
-//    }
-//
-//    public void removeListener(TelemeterListener listener) {
-//        if (!listeners.contains(listener)) {
-//            listeners.remove(listener);
-//        }
-//    }
+    public TelemeterLoader(Context context, TelemeterLoaderResponse listener) {
+        this.context = context;
+//        this.listener = listener;
+    }
 
+    public static void registerAsListener(TelemeterLoaderResponse listener){
+        if(listeners==null){
+            listeners = new ArrayList<TelemeterLoaderResponse>();
+        }
+        listeners.add(listener);
+    }
+
+    public static void unregisterAsListener(TelemeterLoaderResponse listener){
+        if(listeners==null){
+            listeners = new ArrayList<TelemeterLoaderResponse>();
+        }
+        listeners.remove(listener);
+    }
+
+    /**
+     * Sends a new request for data.
+     */
     public void updateData() {
         String login = PreferenceManager.getDefaultSharedPreferences(context).getString("be.simonraes.telemeter.login", "");
         String password = PreferenceManager.getDefaultSharedPreferences(context).getString("be.simonraes.telemeter.password", "");
@@ -44,21 +53,33 @@ public class TelemeterLoader implements TelemeterSoap.TelemeterLoaderResponse, T
         telemeterSoap.execute(login, password);
     }
 
+    /**
+     * Received SOAP response.
+     */
     @Override
     public void loadComplete(String response) {
         TelenetXmlParser telenetXmlParser = new TelenetXmlParser(this);
         telenetXmlParser.execute(response);
     }
 
+    /**
+     * Finished parsing XML response.
+     */
     @Override
     public void parseComplete(TelemeterData response) {
-//        for (TelemeterListener listener : listeners) {
-        listener.responseComplete(response);
-//        }
-    }
 
+        if (response.getFault().getFaultString() != null && !response.getFault().getFaultString().equals("")) {
+            // Error
+            MessageToaster.displayFaultToast(context, response);
+        } else {
+            TelemeterDataDataSource tdds = new TelemeterDataDataSource(context);
+            tdds.saveTelemeterData(response);
+            Toast.makeText(context, "Telemeter data updated.", Toast.LENGTH_LONG).show();
 
-    public interface TelemeterListener {
-        public void responseComplete(TelemeterData response);
+            for(TelemeterLoaderResponse listener : listeners){
+//            if (listener != null) {
+                listener.telemeterDataUpdated();
+            }
+        }
     }
 }
