@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * Controls the TelemeterData database table.
  * Created by Simon Raes on 22/08/2014.
  */
 public class TelemeterDataDataSource {

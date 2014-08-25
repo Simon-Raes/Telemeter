@@ -27,7 +27,6 @@ public class PeriodFragment extends Fragment {
     }
 
     public void setPeriod(Period period) {
-        System.out.println(period.getFrom());
         String from = new SimpleDateFormat("dd/MM").format(period.getFrom());
         String till = new SimpleDateFormat("dd/MM").format(period.getTill());
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/cooper.ttf");

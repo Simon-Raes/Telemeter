@@ -5,6 +5,7 @@ import android.os.Bundle;
 import be.simonraes.telemeter.fragment.SettingsFragment;
 
 /**
+ * Activity holding the SettingsFragment.
  * Created by Simon Raes on 18/06/2014.
  */
 public class SettingsActivity extends Activity {

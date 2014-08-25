@@ -93,6 +93,12 @@ public class WidgetProvider extends AppWidgetProvider implements TelemeterLoader
         }
     }
 
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
+        TelemeterLoader.unregisterAsListener(this);
+    }
+
     /**
      * Saves the widget dimensions to SharedPreferences so they will be available after updating the widget content.
      */

@@ -9,7 +9,7 @@ import java.text.DecimalFormat;
  */
 public class Conversion {
 
-    /*Converts a double to a string and removes the decimals*/
+    /**Converts a double to a string and removes the decimals.*/
     public static String doubleToRoundedString(double number){
         DecimalFormat format = new DecimalFormat("0");
 

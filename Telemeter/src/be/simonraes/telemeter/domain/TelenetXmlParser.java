@@ -252,8 +252,6 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterData> {
         String faultstring = null;
         Detail detail = null;
 
-        System.out.println("readFault");
-
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -276,14 +274,12 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterData> {
         parser.require(XmlPullParser.START_TAG, null, "detail");
         Detail detail = null;
 
-        System.out.println("readDetail");
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            System.out.println(name);
             if (name.equals("TelemeterFault")) {
                 detail = readDetailContent(parser);
             } else {
@@ -298,7 +294,6 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterData> {
         String code = null;
         String description = null;
 
-        System.out.println("readDetailContent");
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -313,7 +308,6 @@ public class TelenetXmlParser extends AsyncTask<String, Void, TelemeterData> {
                 skip(parser);
             }
         }
-        System.out.println("read " + code + " " + description);
         return new Detail(code, description);
     }
 

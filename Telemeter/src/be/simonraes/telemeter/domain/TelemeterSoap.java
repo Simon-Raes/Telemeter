@@ -74,7 +74,7 @@ public class TelemeterSoap extends AsyncTask<String, Void, String> {
             HttpResponse response = httpclient.execute(httppost);
             telemeterResponse = inputStreamToString(response.getEntity().getContent());
         } catch (Exception e) {
-            System.out.println("exception during download= " + e.getMessage());
+            System.out.println("exception during download: " + e.getMessage());
         }
         return telemeterResponse;
     }

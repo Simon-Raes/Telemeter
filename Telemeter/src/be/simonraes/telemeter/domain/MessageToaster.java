@@ -12,6 +12,8 @@ public class MessageToaster {
     public static void displayFaultToast(Context context, TelemeterData data){
         if (data.getFault().getFaultString().contains("Incorrect Login or Password specified")) {
             Toast.makeText(context, "Incorrect login/password combination.", Toast.LENGTH_SHORT).show();
+        } else if(data.getFault().getFaultString().contains("Either input login-id or password are null or empty.")){
+            Toast.makeText(context, "Login and password required.", Toast.LENGTH_SHORT).show();
         } else if (data.getFault().getFaultString().contains("Please try accessing data after expiry time")) {
             Toast.makeText(context, "Refreshed too often. Please try again later.", Toast.LENGTH_SHORT).show();
         } else {

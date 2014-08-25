@@ -14,7 +14,6 @@ import java.util.ArrayList;
  */
 public class TelemeterLoader implements TelemeterSoap.TelemeterSoapResponse, TelenetXmlParser.TelenetXmlResponse {
 
-//    private TelemeterLoaderResponse listener;
     private static ArrayList<TelemeterLoaderResponse> listeners;
 
     public interface TelemeterLoaderResponse {
@@ -25,21 +24,21 @@ public class TelemeterLoader implements TelemeterSoap.TelemeterSoapResponse, Tel
 
     public TelemeterLoader(Context context, TelemeterLoaderResponse listener) {
         this.context = context;
-//        this.listener = listener;
     }
 
-    public static void registerAsListener(TelemeterLoaderResponse listener){
-        if(listeners==null){
+    public static void registerAsListener(TelemeterLoaderResponse listener) {
+        if (listeners == null) {
             listeners = new ArrayList<TelemeterLoaderResponse>();
         }
-        listeners.add(listener);
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
     }
 
-    public static void unregisterAsListener(TelemeterLoaderResponse listener){
-        if(listeners==null){
-            listeners = new ArrayList<TelemeterLoaderResponse>();
+    public static void unregisterAsListener(TelemeterLoaderResponse listener) {
+        if (listeners != null && listeners.contains(listener)) {
+            listeners.remove(listener);
         }
-        listeners.remove(listener);
     }
 
     /**
@@ -69,16 +68,17 @@ public class TelemeterLoader implements TelemeterSoap.TelemeterSoapResponse, Tel
     public void parseComplete(TelemeterData response) {
 
         if (response.getFault().getFaultString() != null && !response.getFault().getFaultString().equals("")) {
-            // Error
+            // Error detected
             MessageToaster.displayFaultToast(context, response);
         } else {
             TelemeterDataDataSource tdds = new TelemeterDataDataSource(context);
             tdds.saveTelemeterData(response);
             Toast.makeText(context, "Telemeter data updated.", Toast.LENGTH_LONG).show();
 
-            for(TelemeterLoaderResponse listener : listeners){
-//            if (listener != null) {
-                listener.telemeterDataUpdated();
+            if (listeners != null && listeners.size() > 0) {
+                for (TelemeterLoaderResponse listener : listeners) {
+                    listener.telemeterDataUpdated();
+                }
             }
         }
     }

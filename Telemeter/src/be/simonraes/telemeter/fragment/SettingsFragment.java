@@ -6,14 +6,14 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import be.simonraes.telemeter.R;
-import be.simonraes.telemeter.service.AlarmManagerBroadcastReceiver;
+import be.simonraes.telemeter.service.AutoUpdater;
 
 /**
  * Created by Simon Raes on 18/06/2014.
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private AlarmManagerBroadcastReceiver alarm;
+    private AutoUpdater alarm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         } else if (key.equals("be.simonraes.telemeter.autoupdate")) {
             toggleService();
         } else if (key.equals("be.simonraes.telemeter.autoupdatetime")) {
-            if (Integer.parseInt(getPreferenceScreen().getSharedPreferences().getString("be.simonraes.telemeter.autoupdate", "Your telenet login")) < 1) {
-                getPreferenceScreen().getSharedPreferences().edit().putString("be.simonraes.telemeter.autoupdate", "1").commit();
+            if (Integer.parseInt(getPreferenceScreen().getSharedPreferences().getString("be.simonraes.telemeter.autoupdatetime", "24")) < 1) {
+                getPreferenceScreen().getSharedPreferences().edit().putString("be.simonraes.telemeter.autoupdatetime", "1").commit();
+                String summary = getPreferenceScreen().getSharedPreferences().getString("be.simonraes.telemeter.autoupdatetime", "24")+ " hours";
+                findPreference("be.simonraes.telemeter.autoupdatetime").setSummary(summary);
             }
         }
     }
@@ -63,7 +65,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     private void toggleService() {
         if (alarm == null) {
-            alarm = new AlarmManagerBroadcastReceiver();
+            alarm = new AutoUpdater();
         }
 
         if (getPreferenceScreen().getSharedPreferences().getBoolean("be.simonraes.telemeter.autoupdate", false)) {

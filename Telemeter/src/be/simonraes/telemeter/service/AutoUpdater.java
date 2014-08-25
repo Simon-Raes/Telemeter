@@ -10,9 +10,10 @@ import android.widget.Toast;
 import be.simonraes.telemeter.domain.TelemeterLoader;
 
 /**
- * Created by Simon Raes on 23/08/2014.
+ * Class that will automatically update the latest Telemeter info.
+ * Created by Simon Raes on 23/08/2014. *
  */
-public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
+public class AutoUpdater extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -22,7 +23,8 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         wl.acquire();
 
         // Update telemeter data.
-        Toast.makeText(context, "Updating Telemeter data", Toast.LENGTH_SHORT).show();
+        System.out.println("Updating Telemeter data.");
+        Toast.makeText(context, "Updating Telemeter data.", Toast.LENGTH_SHORT).show();
         TelemeterLoader loader = new TelemeterLoader(context, null);
         loader.updateData();
 
@@ -34,16 +36,15 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
     public void setAlarm(Context context, int updateEveryHours) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        Intent intent = new Intent(context, AutoUpdater.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         long updateEveryMillis = updateEveryHours * 60 * 60 * 1000;
-
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), updateEveryMillis, pendingIntent);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, updateEveryMillis, pendingIntent);
     }
 
     public void cancelAlarm(Context context) {
-        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        Intent intent = new Intent(context, AutoUpdater.class);
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);

@@ -36,7 +36,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".service.AlarmManagerBroadcastReceiver"/>
+        <receiver android:name=".service.AutoUpdater"/>
 
     </application>
 

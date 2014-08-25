@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 /**
  * Detects start-up of the device and starts the service if needed.
@@ -19,11 +18,11 @@ public class BootCompleteListener extends BroadcastReceiver {
 
     static void restartService(Context context) {
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("be.simonraes.telemeter.autoupdate", false)){
-            AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+            AutoUpdater alarm = new AutoUpdater();
             int updateTimer = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("be.simonraes.telemeter.autoupdatetimer","24"));
             alarm.setAlarm(context, updateTimer);
         } else {
-            AlarmManagerBroadcastReceiver alarm = new AlarmManagerBroadcastReceiver();
+            AutoUpdater alarm = new AutoUpdater();
             alarm.cancelAlarm(context);
         }
     }

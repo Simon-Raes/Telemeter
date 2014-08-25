@@ -26,7 +26,7 @@ import be.simonraes.telemeter.model.TelemeterData;
  */
 public class MainActivity extends Activity implements TelemeterLoader.TelemeterLoaderResponse {
 
-    //todo: app logo resize (smaller)
+    //todo: app logo resize (smaller sizes needed)
 
     private TelemeterData data;
 
@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
 
-        if(getActionBar()!=null) {
+        if (getActionBar() != null) {
             getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F36535")));  //R.color.orange doesn't seem to work?
         }
     }
@@ -46,11 +46,17 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
         TelemeterDataDataSource tdds = new TelemeterDataDataSource(this);
         data = tdds.getLatestTelemeterData();
 
-        if(data.getPeriod().getFrom()!=null) {
+        if (data.getPeriod().getFrom() != null) {
             refreshUI();
         }
 
         TelemeterLoader.registerAsListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TelemeterLoader.unregisterAsListener(this);
     }
 
     @Override
@@ -71,7 +77,8 @@ public class MainActivity extends Activity implements TelemeterLoader.TelemeterL
                 return true;
             case R.id.btnDatabaseTest:
                 TelemeterDataDataSource ds = new TelemeterDataDataSource(this);
-                ds.getLatestTelemeterData();
+                TelemeterData data = ds.getLatestTelemeterData();
+                System.out.println("Data was downloaded at " + data.getTicket().getTimestamp());
             default:
                 return super.onOptionsItemSelected(item);
         }
