@@ -32,9 +32,9 @@
                 android:summary="Automatically download the latest Telemeter data."/>
 
         <EditTextPreference
-                android:key="be.simonraes.telemeter.autoupdatetime"
+                android:key="be.simonraes.telemeter.autoupdateinterval"
                 android:defaultValue="24"
-                android:title="Update every"
+                android:title="Update interval"
                 android:summary="24 hours."
                 android:inputType="numberDecimal"
                 android:dependency="be.simonraes.telemeter.autoupdate"/>

@@ -46,13 +46,17 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if (key.equals("be.simonraes.telemeter.login")) {
             updateLoginSummary();
         } else if (key.equals("be.simonraes.telemeter.autoupdate")) {
-            toggleService();
-        } else if (key.equals("be.simonraes.telemeter.autoupdatetime")) {
-            if (Integer.parseInt(getPreferenceScreen().getSharedPreferences().getString("be.simonraes.telemeter.autoupdatetime", "24")) < 1) {
-                getPreferenceScreen().getSharedPreferences().edit().putString("be.simonraes.telemeter.autoupdatetime", "1").commit();
-                String summary = getPreferenceScreen().getSharedPreferences().getString("be.simonraes.telemeter.autoupdatetime", "24")+ " hours";
-                findPreference("be.simonraes.telemeter.autoupdatetime").setSummary(summary);
+            toggleAutoUpdater();
+        } else if (key.equals("be.simonraes.telemeter.autoupdateinterval")) {
+            if (Integer.parseInt(getPreferenceScreen().getSharedPreferences().getString("be.simonraes.telemeter.autoupdateinterval", "24")) < 1) {
+
+                getPreferenceScreen().getSharedPreferences().edit().putString("be.simonraes.telemeter.autoupdateinterval", "1").commit();
             }
+
+                String summary = getPreferenceScreen().getSharedPreferences().getString("be.simonraes.telemeter.autoupdateinterval", "24")+ " hours";
+                findPreference("be.simonraes.telemeter.autoupdateinterval").setSummary(summary);
+                restartAutoUpdater();
+
         }
     }
 
@@ -63,16 +67,28 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
     }
 
-    private void toggleService() {
+    private void toggleAutoUpdater() {
         if (alarm == null) {
             alarm = new AutoUpdater();
         }
 
         if (getPreferenceScreen().getSharedPreferences().getBoolean("be.simonraes.telemeter.autoupdate", false)) {
-            int updateTimer = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("be.simonraes.telemeter.autoupdatetimer","24"));
-            alarm.setAlarm(getActivity(), updateTimer);
+            alarm.setAlarm(getActivity(), getUpdateInterval());
         } else {
             alarm.cancelAlarm(getActivity());
         }
+    }
+
+    private void restartAutoUpdater(){
+        if(alarm==null){
+            alarm = new AutoUpdater();
+            alarm.cancelAlarm(getActivity());
+            alarm.setAlarm(getActivity(),getUpdateInterval());
+        }
+    }
+
+    private int getUpdateInterval(){
+        int updateInterval = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("be.simonraes.telemeter.autoupdateinterval","24"));
+        return updateInterval;
     }
 }
